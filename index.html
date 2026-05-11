@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>RGGS | ReGeniusly Game Studio</title>
     <style>
-        *{margin:0;padding:0;box-sizing:border-box;transition:background .2s,color .2s,border .2s}
+        *{margin:0;padding:0;box-sizing:border-box;transition:background .2s,color .2s}
         body.light{--bg:#f5f0f0;--card:#fff;--text:#8b0000;--text2:#aa2e2e;--border:#ffcccc;--shadow:#0001;--btn:#8b0000;--btn-hover:#b22222;--badge-dev:#ff6666;--badge-ready:#2d8b2d}
         body.dark{--bg:#1a1a1a;--card:#2d2d2d;--text:#ff6666;--text2:#ff8888;--border:#8b0000;--shadow:#0004;--btn:#ff3333;--btn-hover:#ff5555;--badge-dev:#ff8888;--badge-ready:#44cc44}
         body{background:var(--bg);color:var(--text);font-family:'Segoe UI',system-ui}
@@ -16,7 +16,6 @@
         .badge{background:var(--btn);color:#fff;display:inline-block;padding:0.5rem 1.8rem;border-radius:60px;margin-top:1rem}
         .nav{display:flex;gap:1rem;justify-content:center;margin-bottom:2rem;flex-wrap:wrap}
         .nav-btn{background:var(--btn);color:#fff;padding:0.7rem 1.5rem;border-radius:60px;border:none;cursor:pointer;font-weight:bold}
-        .nav-btn:hover{background:var(--btn-hover);transform:scale(1.02)}
         .block{background:var(--card);border-radius:48px;padding:2rem;margin-bottom:2rem;box-shadow:0 15px 30px var(--shadow)}
         h2{font-size:1.8rem;border-left:6px solid var(--text);padding-left:1rem;margin-bottom:1.5rem}
         .team-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:1.5rem}
@@ -24,146 +23,52 @@
         .team-card:hover{transform:translateY(-5px);box-shadow:0 10px 20px var(--shadow)}
         .team-card img{width:120px;height:120px;border-radius:50%;object-fit:cover;margin-bottom:0.8rem;border:3px solid var(--text)}
         .team-card h3{font-size:1.2rem}
-        .team-card p{font-size:0.85rem;color:var(--text2);margin-top:4px}
+        .team-card p{font-size:0.85rem;color:var(--text2)}
         .projects-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:1.5rem}
         .project-card{background:var(--card);border-radius:24px;overflow:hidden;cursor:pointer;position:relative}
         .project-card:hover{transform:translateY(-4px);box-shadow:0 10px 20px var(--shadow)}
-        .project-status{position:absolute;top:10px;right:10px;padding:4px 12px;border-radius:30px;font-size:0.7rem;font-weight:bold;z-index:2}
+        .project-status{position:absolute;top:10px;right:10px;padding:4px 12px;border-radius:30px;font-size:0.7rem;font-weight:bold}
         .status-dev{background:var(--badge-dev);color:#fff}
         .status-ready{background:var(--badge-ready);color:#fff}
         .project-card img{width:100%;height:160px;object-fit:cover}
         .project-info{padding:1rem}
         .articles-list{display:flex;flex-direction:column;gap:1rem}
         .article-item{background:var(--card);border-radius:24px;padding:1rem;cursor:pointer;border-left:5px solid var(--text)}
-        .article-item:hover{background:color-mix(in srgb,var(--card) 80%,var(--text) 10%)}
         .content-page{max-width:800px;margin:0 auto;background:var(--card);border-radius:40px;padding:2rem}
-        .content-page img{max-width:100%;max-height:280px;border-radius:20px;margin:1rem 0;object-fit:cover}
+        .content-page img{max-width:100%;max-height:280px;border-radius:20px;margin:1rem 0}
         .back-btn{background:var(--btn);color:#fff;border:none;padding:0.6rem 1.5rem;border-radius:40px;cursor:pointer;margin-bottom:1rem}
-        .admin-fab{position:fixed;bottom:24px;right:24px;z-index:1000}
-        .admin-fab button{width:60px;height:60px;border-radius:50%;background:var(--card);border:3px solid var(--text);font-size:1.8rem;cursor:pointer;color:var(--text);box-shadow:0 4px 15px #0003}
-        .modal{position:fixed;top:0;left:0;width:100%;height:100%;background:#000c;backdrop-filter:blur(4px);display:flex;align-items:center;justify-content:center;z-index:2000;visibility:hidden;opacity:0}
-        .modal.active{visibility:visible;opacity:1}
-        .modal-card{background:var(--card);padding:2rem;border-radius:48px;width:90%;max-width:450px}
-        .modal-card input{width:100%;padding:12px;margin:8px 0;border-radius:30px;border:1px solid var(--text);background:var(--bg);color:var(--text);font-size:1rem}
-        .btn{background:var(--btn);color:#fff;border:none;padding:10px 20px;border-radius:40px;cursor:pointer;margin-top:8px;margin-right:8px;font-weight:bold}
-        .btn-danger{background:#b33}
-        .admin-page{position:fixed;top:0;left:0;width:100%;height:100%;background:var(--bg);z-index:1500;overflow-y:auto;padding:2rem;display:none}
-        .admin-page.show{display:block}
-        .admin-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:2rem;flex-wrap:wrap}
-        .admin-tabs{display:flex;gap:10px;flex-wrap:wrap;margin-bottom:1.5rem}
-        .tab-btn{background:var(--btn);color:#fff;padding:8px 20px;border-radius:40px;border:none;cursor:pointer}
-        .tab-pane{display:none;background:var(--card);border-radius:40px;padding:1.5rem;margin-top:1rem}
-        .tab-pane.active{display:block}
-        .form-group{margin-bottom:1rem}
-        .form-group label{display:block;margin-bottom:5px;font-weight:bold}
-        .form-group input,.form-group textarea,.form-group select{width:100%;padding:12px;border-radius:30px;border:1px solid var(--text);background:var(--bg);color:var(--text);font-size:1rem}
-        .dev-edit-card{background:var(--bg);border-radius:24px;padding:1rem;margin-bottom:1rem}
-        .project-item{display:flex;justify-content:space-between;align-items:center;background:var(--bg);border-radius:24px;padding:1rem;margin-bottom:0.8rem}
-        .close-admin{background:#b33;color:#fff;border:none;padding:8px 20px;border-radius:40px;cursor:pointer}
+        .admin-link{position:fixed;bottom:24px;right:24px;background:var(--card);border:3px solid var(--text);width:60px;height:60px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:1.8rem;text-decoration:none;color:var(--text);box-shadow:0 4px 15px #0003}
         footer{text-align:center;margin-top:3rem;padding:1.5rem;border-top:2px solid var(--text)}
+        .loading{text-align:center;padding:3rem;font-size:1.5rem}
     </style>
 </head>
 <body class="light">
-
 <button class="theme-btn" id="themeToggle">🌙</button>
-<div id="app"></div>
-
-<div class="admin-fab"><button id="adminFab">⚙️</button></div>
-
-<div id="loginModal" class="modal">
-    <div class="modal-card">
-        <h3 style="margin-bottom:1rem">🔐 Вход в админку</h3>
-        <input type="text" id="loginInput" placeholder="Логин" autocomplete="off">
-        <input type="password" id="passwordInput" placeholder="Пароль">
-        <button id="doLoginBtn" class="btn">Войти</button>
-        <button id="closeLoginBtn" class="btn" style="background:#666">Отмена</button>
-    </div>
-</div>
-
-<div id="adminPage" class="admin-page">
-    <div class="admin-header">
-        <h2>🛠️ Панель управления</h2>
-        <button id="closeAdminBtn" class="close-admin">✕ Закрыть</button>
-    </div>
-    <div class="admin-tabs">
-        <button class="tab-btn" data-tab="articles">📝 Статьи</button>
-        <button class="tab-btn" data-tab="projects">🎮 Проекты</button>
-        <button class="tab-btn" data-tab="team">👥 Команда</button>
-    </div>
-    
-    <div id="tabArticles" class="tab-pane">
-        <h3>➕ Создать статью</h3>
-        <div class="form-group"><input type="text" id="artTitle" placeholder="Заголовок"></div>
-        <div class="form-group"><input type="file" id="artFile" accept="image/*"></div>
-        <div class="form-group"><input type="text" id="artUrl" placeholder="Или URL картинки"></div>
-        <div class="form-group"><textarea id="artText" rows="4" placeholder="Текст статьи..."></textarea></div>
-        <button id="createArticleBtn" class="btn">📌 Создать</button>
-        <hr style="margin:1.5rem 0">
-        <h3>📋 Существующие статьи</h3>
-        <div id="articlesListAdmin"></div>
-    </div>
-    
-    <div id="tabProjects" class="tab-pane">
-        <h3>➕ Создать проект</h3>
-        <div class="form-group"><input type="text" id="projTitle" placeholder="Название"></div>
-        <div class="form-group"><select id="projStatus"><option value="dev">⚙️ В разработке</option><option value="ready">✅ Готов</option></select></div>
-        <div class="form-group"><input type="file" id="projFile" accept="image/*"></div>
-        <div class="form-group"><input type="text" id="projUrl" placeholder="Или URL"></div>
-        <div class="form-group"><input type="text" id="projShort" placeholder="Краткое описание"></div>
-        <div class="form-group"><textarea id="projFull" rows="3" placeholder="Полное описание"></textarea></div>
-        <button id="createProjectBtn" class="btn">🎮 Создать</button>
-        <hr style="margin:1.5rem 0">
-        <h3>📋 Управление проектами (удаление)</h3>
-        <div id="projectsListAdmin"></div>
-    </div>
-    
-    <div id="tabTeam" class="tab-pane">
-        <h3>👥 Редактирование команды</h3>
-        <div id="teamListAdmin"></div>
-        <button id="saveTeamBtn" class="btn">💾 Сохранить изменения</button>
-    </div>
-</div>
+<div id="app"><div class="loading">📡 Загрузка данных...</div></div>
+<a href="admin.html" class="admin-link">⚙️</a>
 
 <script>
-    let articles=[],projects=[],team=[],scrollPos=0,isAdmin=false;
+    let articles=[], projects=[], team=[], scrollPos=0;
     
-    const load=()=>{
-        const storedArticles=localStorage.getItem('rggs_a');
-        const storedProjects=localStorage.getItem('rggs_p');
-        const storedTeam=localStorage.getItem('rggs_t');
-        
-        if(storedArticles) articles=JSON.parse(storedArticles);
-        else articles=[
-            {id:1,title:"Как создаётся игра",image:"pic3.jpeg",text:"Мы делаем уникальный сюжетный опыт. Команда из 5 человек работает каждый день. Каждый пиксель с душой."},
-            {id:2,title:"Новый арт",image:"pic2.jpeg",text:"Южный показал концепты главного героя. Стиль — минимализм с глубокими тенями."}
-        ];
-        
-        if(storedProjects) projects=JSON.parse(storedProjects);
-        else projects=[
-            {id:1,title:"Эхо Теней",image:"pic4.jpeg",short:"Психологический хоррор",full:"3D инди-игра про тайны сознания. Исследуйте мрачные коридоры памяти.",status:"dev"},
-            {id:2,title:"Последний Рассвет",image:"pic5.jpeg",short:"Постапокалипсис",full:"2D платформер-повествование. История о надежде в разрушенном мире.",status:"ready"}
-        ];
-        
-        if(storedTeam) team=JSON.parse(storedTeam);
-        else team=[
-            {id:1,name:"Tarantul",role:"Программист",desc:"Чёткий пацан, кодит мощно, не жалеет клавиатуру. Делает невозможное возможным.",avatar:"pic1.jpeg"},
-            {id:2,name:"Южный",role:"Художник",desc:"Чёткий пацан, рисует стиль, не жалеет красок. Каждый кадр — искусство.",avatar:"pic2.jpeg"},
-            {id:3,name:"Loxotron",role:"Геймдизайнер",desc:"Чёткий пацан, придумывает механики, не жалеет нервов. Геймплей — огонь.",avatar:"pic3.jpeg"},
-            {id:4,name:"Юра",role:"Создатель идеи",desc:"Чёткий пацан, генерит идеи, не жалеет фантазии. Лидер и визионер.",avatar:"pic4.jpeg"},
-            {id:5,name:"Filin",role:"Сценарист",desc:"Чёткий пацан, пишет сюжеты, не жалеет слёз игроков. Истории, от которых мурашки.",avatar:"pic5.jpeg"}
-        ];
-    };
+    async function loadData(){
+        try{
+            const [artRes, projRes, teamRes]=await Promise.all([
+                fetch('data/articles.json?t='+Date.now()),
+                fetch('data/projects.json?t='+Date.now()),
+                fetch('data/team.json?t='+Date.now())
+            ]);
+            articles=await artRes.json();
+            projects=await projRes.json();
+            team=await teamRes.json();
+            renderHome();
+        }catch(e){
+            document.getElementById('app').innerHTML='<div class="container"><div class="loading">❌ Ошибка загрузки данных. Убедитесь, что файлы data/*.json существуют.</div></div>';
+        }
+    }
     
-    const save=()=>{
-        localStorage.setItem('rggs_a',JSON.stringify(articles));
-        localStorage.setItem('rggs_p',JSON.stringify(projects));
-        localStorage.setItem('rggs_t',JSON.stringify(team));
-    };
+    function escape(s){return String(s||'').replace(/[&<>]/g,m=>m=='&'?'&amp;':m=='<'?'&lt;':'&gt;');}
     
-    const escape=(s)=>String(s||'').replace(/[&<>]/g,m=>m=='&'?'&amp;':m=='<'?'&lt;':'&gt;');
-    const upload=(f,cb)=>{if(!f){cb('');return;}let r=new FileReader();r.onload=e=>cb(e.target.result);r.readAsDataURL(f);};
-    
-    const renderHome=()=>{
+    function renderHome(){
         const teamHtml=team.map(t=>`
             <div class="team-card" onclick="viewTeam(${t.id})">
                 <img src="${t.avatar}" onerror="this.src='https://placehold.co/150/8b0000/white?text=${t.name}'">
@@ -190,99 +95,54 @@
         
         document.getElementById('app').innerHTML=`
             <div class="container">
-                <div class="hero">
-                    <h1>R G G S</h1>
-                    <p>ReGeniusly Game Studio — инди с душой</p>
-                    <div class="badge">⚔️ 2D / 3D игры ⚔️</div>
-                </div>
-                <div class="nav">
-                    <button class="nav-btn" onclick="goHome()">🏠 Главная</button>
-                    <button class="nav-btn" onclick="showAllArticles()">📖 Статьи</button>
-                    <button class="nav-btn" onclick="showAllProjects()">🎮 Проекты</button>
-                </div>
-                <div class="block">
-                    <h2>👥 Команда разработчиков</h2>
-                    <div class="team-grid">${teamHtml}</div>
-                </div>
-                <div class="block">
-                    <h2>🎮 Наши проекты</h2>
-                    <div class="projects-grid">${projHtml||'<p>Нет проектов</p>'}</div>
-                </div>
-                <div class="block">
-                    <h2>📖 Последние статьи</h2>
-                    <div class="articles-list">${artHtml||'<p>Нет статей</p>'}</div>
-                </div>
+                <div class="hero"><h1>R G G S</h1><p>ReGeniusly Game Studio — инди с душой</p><div class="badge">⚔️ 2D / 3D игры ⚔️</div></div>
+                <div class="nav"><button class="nav-btn" onclick="goHome()">🏠 Главная</button><button class="nav-btn" onclick="showAllArticles()">📖 Статьи</button><button class="nav-btn" onclick="showAllProjects()">🎮 Проекты</button></div>
+                <div class="block"><h2>👥 Команда разработчиков</h2><div class="team-grid">${teamHtml}</div></div>
+                <div class="block"><h2>🎮 Наши проекты</h2><div class="projects-grid">${projHtml||'<p>Нет проектов</p>'}</div></div>
+                <div class="block"><h2>📖 Последние статьи</h2><div class="articles-list">${artHtml||'<p>Нет статей</p>'}</div></div>
                 <footer>RGGS — истории, которые остаются с вами</footer>
             </div>
         `;
         window.scrollTo(0,scrollPos);
-    };
+    }
     
-    const goHome=()=>{
-        scrollPos=window.scrollY;
-        renderHome();
-    };
+    function goHome(){scrollPos=window.scrollY;renderHome();}
     
     window.viewTeam=(id)=>{
         let t=team.find(x=>x.id==id);
-        if(t){
-            document.getElementById('app').innerHTML=`
-                <div class="container">
-                    <button class="back-btn" onclick="goHome()">← На главную</button>
-                    <div class="content-page">
-                        <h1>${escape(t.name)}</h1>
-                        <h3 style="color:var(--text2)">${escape(t.role)}</h3>
-                        <img src="${t.avatar}" onerror="this.src='https://placehold.co/800/8b0000/white?text=${t.name}'">
-                        <p style="font-size:1.2rem; line-height:1.5;">${escape(t.desc)}</p>
-                    </div>
-                </div>
-            `;
-        }
+        if(t) showPage(t.name,t.avatar,`<h3>${escape(t.role)}</h3><p>${escape(t.desc)}</p>`);
     };
-    
     window.viewArticle=(id)=>{
         let a=articles.find(x=>x.id==id);
-        if(a){
-            document.getElementById('app').innerHTML=`
-                <div class="container">
-                    <button class="back-btn" onclick="goHome()">← На главную</button>
-                    <div class="content-page">
-                        <h1>${escape(a.title)}</h1>
-                        <img src="${a.image}" onerror="this.src='https://placehold.co/800/8b0000/white?text=image'">
-                        <p style="font-size:1.2rem; line-height:1.5;">${escape(a.text)}</p>
-                    </div>
-                </div>
-            `;
-        }
+        if(a) showPage(a.title,a.image,`<p>${escape(a.text)}</p>`);
     };
-    
     window.viewProject=(id)=>{
         let p=projects.find(x=>x.id==id);
-        if(p){
-            document.getElementById('app').innerHTML=`
-                <div class="container">
-                    <button class="back-btn" onclick="goHome()">← На главную</button>
-                    <div class="content-page">
-                        <h1>🎮 ${escape(p.title)}</h1>
-                        <div class="project-status ${p.status=='dev'?'status-dev':'status-ready'}" style="position:relative; display:inline-block; margin-bottom:1rem;">${p.status=='dev'?'⚙️ В разработке':'✅ Готов'}</div>
-                        <img src="${p.image}" onerror="this.src='https://placehold.co/800/8b0000/white?text=project'">
-                        <p><strong>Кратко:</strong> ${escape(p.short)}</p>
-                        <p><strong>Полное описание:</strong> ${escape(p.full)}</p>
-                    </div>
-                </div>
-            `;
-        }
+        if(p) showPage(p.title,p.image,`<div class="project-status ${p.status=='dev'?'status-dev':'status-ready'}" style="display:inline-block;margin-bottom:1rem;">${p.status=='dev'?'⚙️ В разработке':'✅ Готов'}</div><p><strong>Кратко:</strong> ${escape(p.short)}</p><p><strong>Полное описание:</strong> ${escape(p.full)}</p>`);
     };
     
-    const showAllArticles=()=>{
+    function showPage(title,img,content){
+        document.getElementById('app').innerHTML=`
+            <div class="container">
+                <button class="back-btn" onclick="goHome()">← На главную</button>
+                <div class="content-page">
+                    <h1>${escape(title)}</h1>
+                    <img src="${img}" onerror="this.src='https://placehold.co/800/8b0000/white?text=image'">
+                    ${content}
+                </div>
+            </div>
+        `;
+    }
+    
+    function showAllArticles(){
         let h=articles.slice().reverse().map(a=>`<div class="article-item" onclick="viewArticle(${a.id})"><h3>📄 ${escape(a.title)}</h3><p>${escape(a.text.substring(0,120))}...</p></div>`).join('');
         document.getElementById('app').innerHTML=`<div class="container"><button class="back-btn" onclick="goHome()">← На главную</button><h1 style="font-size:2rem">Все статьи</h1><div class="articles-list">${h}</div></div>`;
-    };
+    }
     
-    const showAllProjects=()=>{
+    function showAllProjects(){
         let h=projects.map(p=>`<div class="project-card" onclick="viewProject(${p.id})"><div class="project-status ${p.status=='dev'?'status-dev':'status-ready'}">${p.status=='dev'?'⚙️ В разработке':'✅ Готов'}</div><img src="${p.image}" onerror="this.src='https://placehold.co/400x200/8b0000/white?text=no+img'"><div class="project-info"><h3>${escape(p.title)}</h3><p>${escape(p.short)}</p></div></div>`).join('');
         document.getElementById('app').innerHTML=`<div class="container"><button class="back-btn" onclick="goHome()">← На главную</button><h1 style="font-size:2rem">Все проекты</h1><div class="projects-grid">${h}</div></div>`;
-    };
+    }
     
     let currentTheme='light';
     const setTheme=(t)=>{
@@ -290,202 +150,15 @@
         document.body.className=t;
         document.getElementById('themeToggle').textContent=t=='light'?'🌙':'☀️';
         localStorage.setItem('theme',t);
-        let savedScroll=window.scrollY;
+        let s=window.scrollY;
         renderHome();
-        setTimeout(()=>{window.scrollTo(0,savedScroll);},10);
+        setTimeout(()=>window.scrollTo(0,s),10);
     };
-    
     const themeStored=localStorage.getItem('theme');
-    if(themeStored)setTheme(themeStored);
-    else setTheme('light');
+    setTheme(themeStored=='dark'?'dark':'light');
+    document.getElementById('themeToggle').onclick=()=>{let s=window.scrollY;setTheme(currentTheme=='light'?'dark':'light');setTimeout(()=>window.scrollTo(0,s),20);};
     
-    document.getElementById('themeToggle').onclick=()=>{
-        let newTheme=currentTheme=='light'?'dark':'light';
-        let savedScroll=window.scrollY;
-        setTheme(newTheme);
-        setTimeout(()=>{window.scrollTo(0,savedScroll);},20);
-    };
-    
-    const adminPage=document.getElementById('adminPage');
-    const loginModal=document.getElementById('loginModal');
-    const fab=document.getElementById('adminFab');
-    const closeAdmin=()=>{adminPage.classList.remove('show');};
-    const openAdminIfAuth=()=>{if(isAdmin){adminPage.classList.add('show');renderAdminLists();}else loginModal.classList.add('active');};
-    
-    fab.onclick=openAdminIfAuth;
-    document.getElementById('closeAdminBtn').onclick=closeAdmin;
-    document.getElementById('closeLoginBtn').onclick=()=>loginModal.classList.remove('active');
-    
-    const loginInput=document.getElementById('loginInput');
-    const passInput=document.getElementById('passwordInput');
-    const handleEnter=(e,next)=>{if(e.key==='Enter'){e.preventDefault();next?next.focus():document.getElementById('doLoginBtn').click();}};
-    loginInput.onkeydown=e=>handleEnter(e,passInput);
-    passInput.onkeydown=e=>handleEnter(e,null);
-    
-    document.getElementById('doLoginBtn').onclick=()=>{
-        if(loginInput.value==='админ'&&passInput.value==='админ'){
-            isAdmin=true;
-            loginModal.classList.remove('active');
-            adminPage.classList.add('show');
-            renderAdminLists();
-            loginInput.value='';
-            passInput.value='';
-        }else alert('Неверно! Логин: админ, пароль: админ');
-    };
-    
-    function renderAdminLists(){
-        document.getElementById('articlesListAdmin').innerHTML=articles.slice().reverse().map(a=>`
-            <div class="project-item">
-                <div><strong>${escape(a.title)}</strong><br><small>${escape(a.text.substring(0,60))}...</small></div>
-                <button class="btn btn-danger" onclick="deleteArticle(${a.id})">🗑️</button>
-            </div>
-        `).join('');
-        
-        document.getElementById('projectsListAdmin').innerHTML=projects.map(p=>`
-            <div class="project-item">
-                <div><strong>${escape(p.title)}</strong> — ${p.status=='dev'?'В разработке':'Готов'}</div>
-                <button class="btn btn-danger" onclick="deleteProject(${p.id})">🗑️</button>
-            </div>
-        `).join('');
-        
-        document.getElementById('teamListAdmin').innerHTML=team.map(t=>`
-            <div class="dev-edit-card">
-                <h4>${escape(t.name)}</h4>
-                <div class="form-group"><input type="text" id="tname_${t.id}" value="${escape(t.name)}" placeholder="Имя"></div>
-                <div class="form-group"><input type="text" id="trole_${t.id}" value="${escape(t.role)}" placeholder="Роль"></div>
-                <div class="form-group"><textarea id="tdesc_${t.id}" rows="3">${escape(t.desc)}</textarea></div>
-                <div class="form-group"><input type="file" id="tfile_${t.id}" accept="image/*"></div>
-                <div class="form-group"><input type="text" id="turl_${t.id}" value="${t.avatar}" placeholder="URL аватара"></div>
-                <small>Текущий аватар: ${t.avatar.substring(0,40)}</small>
-            </div>
-        `).join('');
-    }
-    
-    window.deleteArticle=(id)=>{
-        if(confirm('Удалить статью?')){
-            articles=articles.filter(a=>a.id!=id);
-            save();
-            let savedScroll=window.scrollY;
-            renderHome();
-            setTimeout(()=>{window.scrollTo(0,savedScroll);},10);
-            if(isAdmin) renderAdminLists();
-        }
-    };
-    
-    window.deleteProject=(id)=>{
-        if(confirm('Удалить проект?')){
-            projects=projects.filter(p=>p.id!=id);
-            save();
-            let savedScroll=window.scrollY;
-            renderHome();
-            setTimeout(()=>{window.scrollTo(0,savedScroll);},10);
-            if(isAdmin) renderAdminLists();
-        }
-    };
-    
-    document.getElementById('createArticleBtn').onclick=()=>{
-        let t=document.getElementById('artTitle').value.trim();
-        let tx=document.getElementById('artText').value.trim();
-        let url=document.getElementById('artUrl').value.trim();
-        let f=document.getElementById('artFile').files[0];
-        if(!t||!tx){alert('Заполните заголовок и текст');return;}
-        let saveImg=(img)=>{
-            articles.push({id:Date.now(),title:t,image:img||'pic1.jpeg',text:tx});
-            save();
-            let savedScroll=window.scrollY;
-            renderHome();
-            setTimeout(()=>{window.scrollTo(0,savedScroll);},10);
-            if(isAdmin) renderAdminLists();
-            document.getElementById('artTitle').value='';
-            document.getElementById('artText').value='';
-            document.getElementById('artUrl').value='';
-            document.getElementById('artFile').value='';
-            alert('Статья создана!');
-        };
-        if(f)upload(f,saveImg);
-        else saveImg(url);
-    };
-    
-    document.getElementById('createProjectBtn').onclick=()=>{
-        let t=document.getElementById('projTitle').value.trim();
-        let st=document.getElementById('projStatus').value;
-        let sd=document.getElementById('projShort').value.trim();
-        let fd=document.getElementById('projFull').value.trim();
-        let url=document.getElementById('projUrl').value.trim();
-        let f=document.getElementById('projFile').files[0];
-        if(!t||!fd){alert('Название и полное описание обязательны');return;}
-        let saveImg=(img)=>{
-            projects.push({id:Date.now(),title:t,image:img||'pic1.jpeg',short:sd||fd.substring(0,80),full:fd,status:st});
-            save();
-            let savedScroll=window.scrollY;
-            renderHome();
-            setTimeout(()=>{window.scrollTo(0,savedScroll);},10);
-            if(isAdmin) renderAdminLists();
-            document.getElementById('projTitle').value='';
-            document.getElementById('projStatus').value='dev';
-            document.getElementById('projShort').value='';
-            document.getElementById('projFull').value='';
-            document.getElementById('projUrl').value='';
-            document.getElementById('projFile').value='';
-            alert('Проект создан!');
-        };
-        if(f)upload(f,saveImg);
-        else saveImg(url);
-    };
-    
-    document.getElementById('saveTeamBtn').onclick=()=>{
-        team.forEach(t=>{
-            let n=document.getElementById(`tname_${t.id}`)?.value;
-            let r=document.getElementById(`trole_${t.id}`)?.value;
-            let d=document.getElementById(`tdesc_${t.id}`)?.value;
-            let u=document.getElementById(`turl_${t.id}`)?.value;
-            let f=document.getElementById(`tfile_${t.id}`)?.files[0];
-            if(n)t.name=n;
-            if(r)t.role=r;
-            if(d)t.desc=d;
-            if(u)t.avatar=u;
-            if(f){
-                let rd=new FileReader();
-                rd.onload=e=>{
-                    t.avatar=e.target.result;
-                    save();
-                    let savedScroll=window.scrollY;
-                    renderHome();
-                    setTimeout(()=>{window.scrollTo(0,savedScroll);},10);
-                    if(isAdmin) renderAdminLists();
-                };
-                rd.readAsDataURL(f);
-            }
-        });
-        save();
-        let savedScroll=window.scrollY;
-        renderHome();
-        setTimeout(()=>{window.scrollTo(0,savedScroll);},10);
-        if(isAdmin) renderAdminLists();
-        alert('Команда обновлена!');
-    };
-    
-    document.querySelectorAll('.tab-btn').forEach(btn=>{
-        btn.onclick=()=>{
-            let tab=btn.dataset.tab;
-            document.querySelectorAll('.tab-pane').forEach(p=>p.classList.remove('active'));
-            document.getElementById(`tab${tab.charAt(0).toUpperCase()+tab.slice(1)}`).classList.add('active');
-        };
-    });
-    document.querySelectorAll('.tab-pane')[0].classList.add('active');
-    
-    load();
-    renderHome();
-    
-    window.addEventListener('storage',(e)=>{
-        if(e.key==='rggs_a'||e.key==='rggs_p'||e.key==='rggs_t'){
-            load();
-            let savedScroll=window.scrollY;
-            renderHome();
-            setTimeout(()=>{window.scrollTo(0,savedScroll);},10);
-            if(isAdmin) renderAdminLists();
-        }
-    });
+    loadData();
 </script>
 </body>
 </html>
