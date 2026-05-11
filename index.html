@@ -128,22 +128,30 @@
     let articles=[],projects=[],team=[],scrollPos=0,isAdmin=false;
     
     const load=()=>{
-        articles=JSON.parse(localStorage.getItem('rggs_a'))||[
+        const storedArticles=localStorage.getItem('rggs_a');
+        const storedProjects=localStorage.getItem('rggs_p');
+        const storedTeam=localStorage.getItem('rggs_t');
+        
+        if(storedArticles) articles=JSON.parse(storedArticles);
+        else articles=[
             {id:1,title:"Как создаётся игра",image:"pic3.jpeg",text:"Мы делаем уникальный сюжетный опыт. Команда из 5 человек работает каждый день. Каждый пиксель с душой."},
             {id:2,title:"Новый арт",image:"pic2.jpeg",text:"Южный показал концепты главного героя. Стиль — минимализм с глубокими тенями."}
         ];
-        projects=JSON.parse(localStorage.getItem('rggs_p'))||[
+        
+        if(storedProjects) projects=JSON.parse(storedProjects);
+        else projects=[
             {id:1,title:"Эхо Теней",image:"pic4.jpeg",short:"Психологический хоррор",full:"3D инди-игра про тайны сознания. Исследуйте мрачные коридоры памяти.",status:"dev"},
             {id:2,title:"Последний Рассвет",image:"pic5.jpeg",short:"Постапокалипсис",full:"2D платформер-повествование. История о надежде в разрушенном мире.",status:"ready"}
         ];
-        team=JSON.parse(localStorage.getItem('rggs_t'))||[
+        
+        if(storedTeam) team=JSON.parse(storedTeam);
+        else team=[
             {id:1,name:"Tarantul",role:"Программист",desc:"Чёткий пацан, кодит мощно, не жалеет клавиатуру. Делает невозможное возможным.",avatar:"pic1.jpeg"},
             {id:2,name:"Южный",role:"Художник",desc:"Чёткий пацан, рисует стиль, не жалеет красок. Каждый кадр — искусство.",avatar:"pic2.jpeg"},
             {id:3,name:"Loxotron",role:"Геймдизайнер",desc:"Чёткий пацан, придумывает механики, не жалеет нервов. Геймплей — огонь.",avatar:"pic3.jpeg"},
             {id:4,name:"Юра",role:"Создатель идеи",desc:"Чёткий пацан, генерит идеи, не жалеет фантазии. Лидер и визионер.",avatar:"pic4.jpeg"},
             {id:5,name:"Filin",role:"Сценарист",desc:"Чёткий пацан, пишет сюжеты, не жалеет слёз игроков. Истории, от которых мурашки.",avatar:"pic5.jpeg"}
         ];
-        save();
     };
     
     const save=()=>{
@@ -173,7 +181,7 @@
             </div>
         `).join('');
         
-        const artHtml=articles.map(a=>`
+        const artHtml=articles.slice().reverse().map(a=>`
             <div class="article-item" onclick="viewArticle(${a.id})">
                 <h3>📄 ${escape(a.title)}</h3>
                 <p>${escape(a.text.substring(0,100))}...</p>
@@ -267,13 +275,13 @@
     };
     
     const showAllArticles=()=>{
-        let h=articles.map(a=>`<div class="article-item" onclick="viewArticle(${a.id})"><h3>📄 ${escape(a.title)}</h3><p>${escape(a.text.substring(0,120))}...</p></div>`).join('');
-        document.getElementById('app').innerHTML=`<div class="container"><button class="back-btn" onclick="goHome()">← На главную</button><h1 style="font-size:2rem">Статьи</h1><div class="articles-list">${h}</div></div>`;
+        let h=articles.slice().reverse().map(a=>`<div class="article-item" onclick="viewArticle(${a.id})"><h3>📄 ${escape(a.title)}</h3><p>${escape(a.text.substring(0,120))}...</p></div>`).join('');
+        document.getElementById('app').innerHTML=`<div class="container"><button class="back-btn" onclick="goHome()">← На главную</button><h1 style="font-size:2rem">Все статьи</h1><div class="articles-list">${h}</div></div>`;
     };
     
     const showAllProjects=()=>{
         let h=projects.map(p=>`<div class="project-card" onclick="viewProject(${p.id})"><div class="project-status ${p.status=='dev'?'status-dev':'status-ready'}">${p.status=='dev'?'⚙️ В разработке':'✅ Готов'}</div><img src="${p.image}" onerror="this.src='https://placehold.co/400x200/8b0000/white?text=no+img'"><div class="project-info"><h3>${escape(p.title)}</h3><p>${escape(p.short)}</p></div></div>`).join('');
-        document.getElementById('app').innerHTML=`<div class="container"><button class="back-btn" onclick="goHome()">← На главную</button><h1 style="font-size:2rem">Проекты</h1><div class="projects-grid">${h}</div></div>`;
+        document.getElementById('app').innerHTML=`<div class="container"><button class="back-btn" onclick="goHome()">← На главную</button><h1 style="font-size:2rem">Все проекты</h1><div class="projects-grid">${h}</div></div>`;
     };
     
     let currentTheme='light';
@@ -326,7 +334,7 @@
     };
     
     function renderAdminLists(){
-        document.getElementById('articlesListAdmin').innerHTML=articles.map(a=>`
+        document.getElementById('articlesListAdmin').innerHTML=articles.slice().reverse().map(a=>`
             <div class="project-item">
                 <div><strong>${escape(a.title)}</strong><br><small>${escape(a.text.substring(0,60))}...</small></div>
                 <button class="btn btn-danger" onclick="deleteArticle(${a.id})">🗑️</button>
@@ -360,7 +368,7 @@
             let savedScroll=window.scrollY;
             renderHome();
             setTimeout(()=>{window.scrollTo(0,savedScroll);},10);
-            renderAdminLists();
+            if(isAdmin) renderAdminLists();
         }
     };
     
@@ -371,7 +379,7 @@
             let savedScroll=window.scrollY;
             renderHome();
             setTimeout(()=>{window.scrollTo(0,savedScroll);},10);
-            renderAdminLists();
+            if(isAdmin) renderAdminLists();
         }
     };
     
@@ -382,12 +390,12 @@
         let f=document.getElementById('artFile').files[0];
         if(!t||!tx){alert('Заполните заголовок и текст');return;}
         let saveImg=(img)=>{
-            articles.unshift({id:Date.now(),title:t,image:img||'pic1.jpeg',text:tx});
+            articles.push({id:Date.now(),title:t,image:img||'pic1.jpeg',text:tx});
             save();
             let savedScroll=window.scrollY;
             renderHome();
             setTimeout(()=>{window.scrollTo(0,savedScroll);},10);
-            renderAdminLists();
+            if(isAdmin) renderAdminLists();
             document.getElementById('artTitle').value='';
             document.getElementById('artText').value='';
             document.getElementById('artUrl').value='';
@@ -407,12 +415,12 @@
         let f=document.getElementById('projFile').files[0];
         if(!t||!fd){alert('Название и полное описание обязательны');return;}
         let saveImg=(img)=>{
-            projects.unshift({id:Date.now(),title:t,image:img||'pic1.jpeg',short:sd||fd.substring(0,80),full:fd,status:st});
+            projects.push({id:Date.now(),title:t,image:img||'pic1.jpeg',short:sd||fd.substring(0,80),full:fd,status:st});
             save();
             let savedScroll=window.scrollY;
             renderHome();
             setTimeout(()=>{window.scrollTo(0,savedScroll);},10);
-            renderAdminLists();
+            if(isAdmin) renderAdminLists();
             document.getElementById('projTitle').value='';
             document.getElementById('projStatus').value='dev';
             document.getElementById('projShort').value='';
@@ -444,7 +452,7 @@
                     let savedScroll=window.scrollY;
                     renderHome();
                     setTimeout(()=>{window.scrollTo(0,savedScroll);},10);
-                    renderAdminLists();
+                    if(isAdmin) renderAdminLists();
                 };
                 rd.readAsDataURL(f);
             }
@@ -453,7 +461,7 @@
         let savedScroll=window.scrollY;
         renderHome();
         setTimeout(()=>{window.scrollTo(0,savedScroll);},10);
-        renderAdminLists();
+        if(isAdmin) renderAdminLists();
         alert('Команда обновлена!');
     };
     
@@ -468,6 +476,16 @@
     
     load();
     renderHome();
+    
+    window.addEventListener('storage',(e)=>{
+        if(e.key==='rggs_a'||e.key==='rggs_p'||e.key==='rggs_t'){
+            load();
+            let savedScroll=window.scrollY;
+            renderHome();
+            setTimeout(()=>{window.scrollTo(0,savedScroll);},10);
+            if(isAdmin) renderAdminLists();
+        }
+    });
 </script>
 </body>
 </html>
