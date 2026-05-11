@@ -16,6 +16,7 @@
         .badge{background:var(--btn);color:#fff;display:inline-block;padding:0.5rem 1.8rem;border-radius:60px;margin-top:1rem}
         .nav{display:flex;gap:1rem;justify-content:center;margin-bottom:2rem;flex-wrap:wrap}
         .nav-btn{background:var(--btn);color:#fff;padding:0.7rem 1.5rem;border-radius:60px;border:none;cursor:pointer;font-weight:bold}
+        .nav-btn:hover{background:var(--btn-hover);transform:scale(1.02)}
         .block{background:var(--card);border-radius:48px;padding:2rem;margin-bottom:2rem;box-shadow:0 15px 30px var(--shadow)}
         h2{font-size:1.8rem;border-left:6px solid var(--text);padding-left:1rem;margin-bottom:1.5rem}
         .team-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:1.5rem}
@@ -52,17 +53,17 @@
     
     async function loadData(){
         try{
-            const [artRes, projRes, teamRes]=await Promise.all([
-                fetch('data/articles.json?t='+Date.now()),
-                fetch('data/projects.json?t='+Date.now()),
-                fetch('data/team.json?t='+Date.now())
+            const [artRes, projRes, teamRes] = await Promise.all([
+                fetch('articles.json?t='+Date.now()),
+                fetch('projects.json?t='+Date.now()),
+                fetch('team.json?t='+Date.now())
             ]);
-            articles=await artRes.json();
-            projects=await projRes.json();
-            team=await teamRes.json();
+            articles = await artRes.json();
+            projects = await projRes.json();
+            team = await teamRes.json();
             renderHome();
         }catch(e){
-            document.getElementById('app').innerHTML='<div class="container"><div class="loading">❌ Ошибка загрузки данных. Убедитесь, что файлы data/*.json существуют.</div></div>';
+            document.getElementById('app').innerHTML='<div class="container"><div class="loading">❌ Ошибка загрузки. Убедитесь, что файлы articles.json, projects.json, team.json есть в корне.</div></div>';
         }
     }
     
