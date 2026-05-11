@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="ru">
 <head>
@@ -20,8 +19,9 @@
         .success{background:#2d8b2d}
         .back-link{display:inline-block;margin-bottom:1rem;color:#ff8888;text-decoration:none}
         .form-group{margin-bottom:1rem}
-        label{display:block;margin-bottom:5px;color:#ff8888}
         hr{margin:1.5rem 0;border-color:#444}
+        .info-box{background:#1a1a1a;border-radius:24px;padding:1rem;margin-top:1rem}
+        .code{background:#2d2d2d;padding:10px;border-radius:30px;font-family:monospace;word-break:break-all;margin:10px 0}
     </style>
 </head>
 <body>
@@ -29,7 +29,7 @@
     <a href="index.html" class="back-link">← На главную</a>
     <div class="card">
         <h1>🛠️ Админ-панель RGGS</h1>
-        <p style="margin-bottom:1.5rem;color:#aaa;">ВНИМАНИЕ: изменения сохраняются в JSON-файлы. После редактирования скачайте файлы и загрузите их в репозиторий GitHub.</p>
+        <p style="margin-bottom:1.5rem;color:#aaa;">Редактируйте данные. После сохранения — скачайте JSON-файлы и загрузите их в корень репозитория GitHub.</p>
         
         <div style="display:flex;gap:1rem;margin-bottom:2rem;flex-wrap:wrap">
             <button id="showArticles">📝 Статьи</button>
@@ -40,7 +40,7 @@
         <div id="articlesPanel">
             <h2>➕ Добавить статью</h2>
             <div class="form-group"><input type="text" id="artTitle" placeholder="Заголовок"></div>
-            <div class="form-group"><input type="text" id="artImage" placeholder="URL картинки (pic1.jpeg и т.д.)"></div>
+            <div class="form-group"><input type="text" id="artImage" placeholder="URL картинки (pic1.jpeg и т.д.)" value="pic1.jpeg"></div>
             <div class="form-group"><textarea id="artText" rows="4" placeholder="Текст статьи..."></textarea></div>
             <button id="addArticleBtn" class="success">📌 Добавить</button>
             <hr>
@@ -57,7 +57,7 @@
                     <option value="ready">✅ Готов</option>
                 </select>
             </div>
-            <div class="form-group"><input type="text" id="projImage" placeholder="URL картинки"></div>
+            <div class="form-group"><input type="text" id="projImage" placeholder="URL картинки" value="pic1.jpeg"></div>
             <div class="form-group"><input type="text" id="projShort" placeholder="Краткое описание"></div>
             <div class="form-group"><textarea id="projFull" rows="3" placeholder="Полное описание"></textarea></div>
             <button id="addProjectBtn" class="success">🎮 Добавить</button>
@@ -73,39 +73,39 @@
         </div>
         
         <hr style="margin-top:2rem">
-        <h2>📦 Экспорт / Импорт</h2>
-        <button id="downloadAllBtn">⬇️ Скачать все JSON</button>
-        <button id="instructionsBtn" style="background:#444">📖 Инструкция по загрузке</button>
-        <div id="instructions" style="display:none;margin-top:1rem;padding:1rem;background:#1a1a1a;border-radius:24px">
-            <h3>Как загрузить изменения на GitHub:</h3>
+        <h2>📦 Экспорт файлов для GitHub</h2>
+        <div class="info-box">
+            <p><strong>Как загрузить изменения на GitHub:</strong></p>
             <ol style="margin-left:1.5rem;margin-top:0.5rem">
-                <li>Нажмите «Скачать все JSON»</li>
-                <li>Распакуйте архив</li>
-                <li>Зайдите в ваш репозиторий на GitHub</li>
-                <li>Перейдите в папку <strong>data/</strong></li>
-                <li>Замените файлы articles.json, projects.json, team.json на новые</li>
+                <li>Нажмите <strong>«Скачать все JSON»</strong></li>
+                <li>Распакуйте ZIP-архив</li>
+                <li>Замените файлы <strong>articles.json</strong>, <strong>projects.json</strong>, <strong>team.json</strong> в корне вашего репозитория</li>
                 <li>Сделайте коммит (Commit changes)</li>
                 <li>Через 1-2 минуты изменения увидят все пользователи</li>
             </ol>
+            <button id="downloadAllBtn" style="margin-top:1rem;background:#2d8b2d">⬇️ Скачать все JSON (ZIP)</button>
         </div>
     </div>
 </div>
 
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
 <script>
     let articles=[], projects=[], team=[];
     
     async function loadData(){
         try{
-            const [art,proj,tm]=await Promise.all([
-                fetch('data/articles.json?t='+Date.now()),
-                fetch('data/projects.json?t='+Date.now()),
-                fetch('data/team.json?t='+Date.now())
+            const [art,proj,tm] = await Promise.all([
+                fetch('articles.json?t='+Date.now()),
+                fetch('projects.json?t='+Date.now()),
+                fetch('team.json?t='+Date.now())
             ]);
-            articles=await art.json();
-            projects=await proj.json();
-            team=await tm.json();
+            articles = await art.json();
+            projects = await proj.json();
+            team = await tm.json();
             renderAll();
-        }catch(e){alert('Ошибка загрузки данных');}
+        }catch(e){
+            alert('Ошибка загрузки данных. Убедитесь, что файлы JSON есть в корне.');
+        }
     }
     
     function escape(s){return String(s||'').replace(/[&<>]/g,m=>m=='&'?'&amp;':m=='<'?'&lt;':'&gt;');}
@@ -168,9 +168,9 @@
         articles.push({id:Date.now(),title:title,image:img||'pic1.jpeg',text:text});
         renderArticlesList();
         document.getElementById('artTitle').value='';
-        document.getElementById('artImage').value='';
+        document.getElementById('artImage').value='pic1.jpeg';
         document.getElementById('artText').value='';
-        alert('Статья добавлена локально! Не забудьте скачать JSON и загрузить на GitHub.');
+        alert('Статья добавлена! Не забудьте скачать JSON и загрузить на GitHub.');
     };
     
     document.getElementById('addProjectBtn').onclick=()=>{
@@ -183,10 +183,10 @@
         projects.push({id:Date.now(),title:title,image:img||'pic1.jpeg',short:short||full.substring(0,80),full:full,status:status});
         renderProjectsList();
         document.getElementById('projTitle').value='';
-        document.getElementById('projImage').value='';
+        document.getElementById('projImage').value='pic1.jpeg';
         document.getElementById('projShort').value='';
         document.getElementById('projFull').value='';
-        alert('Проект добавлен локально! Не забудьте скачать JSON и загрузить на GitHub.');
+        alert('Проект добавлен! Не забудьте скачать JSON и загрузить на GitHub.');
     };
     
     document.getElementById('saveTeamBtn').onclick=()=>{
@@ -201,19 +201,14 @@
             if(a)t.avatar=a;
         });
         renderTeamList();
-        alert('Команда обновлена локально! Не забудьте скачать JSON и загрузить на GitHub.');
+        alert('Команда обновлена! Не забудьте скачать JSON и загрузить на GitHub.');
     };
     
     document.getElementById('downloadAllBtn').onclick=()=>{
-        const data={
-            articles:articles,
-            projects:projects,
-            team:team
-        };
-        const zip=new JSZip();
-        zip.file('data/articles.json',JSON.stringify(articles,null,2));
-        zip.file('data/projects.json',JSON.stringify(projects,null,2));
-        zip.file('data/team.json',JSON.stringify(team,null,2));
+        const zip = new JSZip();
+        zip.file('articles.json', JSON.stringify(articles, null, 2));
+        zip.file('projects.json', JSON.stringify(projects, null, 2));
+        zip.file('team.json', JSON.stringify(team, null, 2));
         zip.generateAsync({type:'blob'}).then(blob=>{
             const url=URL.createObjectURL(blob);
             const a=document.createElement('a');
@@ -222,11 +217,6 @@
             a.click();
             URL.revokeObjectURL(url);
         });
-    };
-    
-    document.getElementById('instructionsBtn').onclick=()=>{
-        const inst=document.getElementById('instructions');
-        inst.style.display=inst.style.display=='none'?'block':'none';
     };
     
     document.getElementById('showArticles').onclick=()=>{
@@ -247,6 +237,5 @@
     
     loadData();
 </script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
 </body>
 </html>
