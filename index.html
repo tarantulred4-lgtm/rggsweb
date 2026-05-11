@@ -19,12 +19,12 @@
         .nav-btn:hover{background:var(--btn-hover);transform:scale(1.02)}
         .block{background:var(--card);border-radius:48px;padding:2rem;margin-bottom:2rem;box-shadow:0 15px 30px var(--shadow)}
         h2{font-size:1.8rem;border-left:6px solid var(--text);padding-left:1rem;margin-bottom:1.5rem}
-        .team-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:1.5rem}
+        .team-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:1.5rem}
         .team-card{background:var(--card);border-radius:28px;padding:1.2rem;text-align:center;cursor:pointer;border:1px solid var(--border);transition:.2s}
         .team-card:hover{transform:translateY(-5px);box-shadow:0 10px 20px var(--shadow)}
-        .team-card img{width:100px;height:100px;border-radius:50%;object-fit:cover;margin-bottom:0.8rem;border:3px solid var(--text)}
-        .team-card h3{font-size:1.1rem}
-        .team-card p{font-size:0.8rem;color:var(--text2);margin-top:4px}
+        .team-card img{width:120px;height:120px;border-radius:50%;object-fit:cover;margin-bottom:0.8rem;border:3px solid var(--text)}
+        .team-card h3{font-size:1.2rem}
+        .team-card p{font-size:0.85rem;color:var(--text2);margin-top:4px}
         .projects-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:1.5rem}
         .project-card{background:var(--card);border-radius:24px;overflow:hidden;cursor:pointer;position:relative}
         .project-card:hover{transform:translateY(-4px);box-shadow:0 10px 20px var(--shadow)}
@@ -61,7 +61,6 @@
         .project-item{display:flex;justify-content:space-between;align-items:center;background:var(--bg);border-radius:24px;padding:1rem;margin-bottom:0.8rem}
         .close-admin{background:#b33;color:#fff;border:none;padding:8px 20px;border-radius:40px;cursor:pointer}
         footer{text-align:center;margin-top:3rem;padding:1.5rem;border-top:2px solid var(--text)}
-        .hidden{display:none}
     </style>
 </head>
 <body class="light">
@@ -127,70 +126,348 @@
 
 <script>
     let articles=[],projects=[],team=[],scrollPos=0,isAdmin=false;
+    
     const load=()=>{
-        articles=JSON.parse(localStorage.getItem('rggs_a'))||[{id:1,title:"Как создаётся игра",image:"pic3.jpeg",text:"Мы делаем уникальный сюжетный опыт. Команда из 5 человек работает каждый день."},{id:2,title:"Новый арт",image:"pic2.jpeg",text:"Южный показал концепты главного героя. Стиль — минимализм."}];
-        projects=JSON.parse(localStorage.getItem('rggs_p'))||[{id:1,title:"Эхо Теней",image:"pic4.jpeg",short:"Психологический хоррор",full:"3D игра про тайны сознания",status:"dev"},{id:2,title:"Последний Рассвет",image:"pic5.jpeg",short:"Постапокалипсис",full:"2D платформер о надежде",status:"ready"}];
+        articles=JSON.parse(localStorage.getItem('rggs_a'))||[
+            {id:1,title:"Как создаётся игра",image:"pic3.jpeg",text:"Мы делаем уникальный сюжетный опыт. Команда из 5 человек работает каждый день. Каждый пиксель с душой."},
+            {id:2,title:"Новый арт",image:"pic2.jpeg",text:"Южный показал концепты главного героя. Стиль — минимализм с глубокими тенями."}
+        ];
+        projects=JSON.parse(localStorage.getItem('rggs_p'))||[
+            {id:1,title:"Эхо Теней",image:"pic4.jpeg",short:"Психологический хоррор",full:"3D инди-игра про тайны сознания. Исследуйте мрачные коридоры памяти.",status:"dev"},
+            {id:2,title:"Последний Рассвет",image:"pic5.jpeg",short:"Постапокалипсис",full:"2D платформер-повествование. История о надежде в разрушенном мире.",status:"ready"}
+        ];
         team=JSON.parse(localStorage.getItem('rggs_t'))||[
-            {id:1,name:"Tarantul",role:"Программист",desc:"Чёткий пацан, кодит мощно, не жалеет клавиатуру",avatar:"pic1.jpeg"},
-            {id:2,name:"Южный",role:"Художник",desc:"Чёткий пацан, рисует стиль, не жалеет красок",avatar:"pic2.jpeg"},
-            {id:3,name:"Loxotron",role:"Геймдизайнер",desc:"Чёткий пацан, придумывает механики, не жалеет нервов",avatar:"pic3.jpeg"},
-            {id:4,name:"Юра",role:"Создатель идеи",desc:"Чёткий пацан, генерит идеи, не жалеет фантазии",avatar:"pic4.jpeg"},
-            {id:5,name:"Filin",role:"Сценарист",desc:"Чёткий пацан, пишет сюжеты, не жалеет слёз игроков",avatar:"pic5.jpeg"}
+            {id:1,name:"Tarantul",role:"Программист",desc:"Чёткий пацан, кодит мощно, не жалеет клавиатуру. Делает невозможное возможным.",avatar:"pic1.jpeg"},
+            {id:2,name:"Южный",role:"Художник",desc:"Чёткий пацан, рисует стиль, не жалеет красок. Каждый кадр — искусство.",avatar:"pic2.jpeg"},
+            {id:3,name:"Loxotron",role:"Геймдизайнер",desc:"Чёткий пацан, придумывает механики, не жалеет нервов. Геймплей — огонь.",avatar:"pic3.jpeg"},
+            {id:4,name:"Юра",role:"Создатель идеи",desc:"Чёткий пацан, генерит идеи, не жалеет фантазии. Лидер и визионер.",avatar:"pic4.jpeg"},
+            {id:5,name:"Filin",role:"Сценарист",desc:"Чёткий пацан, пишет сюжеты, не жалеет слёз игроков. Истории, от которых мурашки.",avatar:"pic5.jpeg"}
         ];
         save();
     };
-    const save=()=>{localStorage.setItem('rggs_a',JSON.stringify(articles));localStorage.setItem('rggs_p',JSON.stringify(projects));localStorage.setItem('rggs_t',JSON.stringify(team));};
+    
+    const save=()=>{
+        localStorage.setItem('rggs_a',JSON.stringify(articles));
+        localStorage.setItem('rggs_p',JSON.stringify(projects));
+        localStorage.setItem('rggs_t',JSON.stringify(team));
+    };
+    
     const escape=(s)=>String(s||'').replace(/[&<>]/g,m=>m=='&'?'&amp;':m=='<'?'&lt;':'&gt;');
     const upload=(f,cb)=>{if(!f){cb('');return;}let r=new FileReader();r.onload=e=>cb(e.target.result);r.readAsDataURL(f);};
     
     const renderHome=()=>{
-        const teamHtml=team.map(t=>`<div class="team-card" onclick="viewTeam(${t.id})"><img src="${t.avatar}" onerror="this.src='https://placehold.co/150/8b0000/white?text=${t.name}'"><h3>${escape(t.name)}</h3><p>${escape(t.role)}</p><small>${escape(t.desc.substring(0,45))}...</small></div>`).join('');
-        const projHtml=projects.map(p=>`<div class="project-card" onclick="viewProject(${p.id})"><div class="project-status ${p.status=='dev'?'status-dev':'status-ready'}">${p.status=='dev'?'⚙️ В разработке':'✅ Готов'}</div><img src="${p.image}" onerror="this.src='https://placehold.co/400x200/8b0000/white?text=no+img'"><div class="project-info"><h3>${escape(p.title)}</h3><p>${escape(p.short)}</p></div></div>`).join('');
-        const artHtml=articles.map(a=>`<div class="article-item" onclick="viewArticle(${a.id})"><h3>📄 ${escape(a.title)}</h3><p>${escape(a.text.substring(0,100))}...</p></div>`).join('');
-        document.getElementById('app').innerHTML=`<div class="container"><div class="hero"><h1>R G G S</h1><p>ReGeniusly Game Studio — инди с душой</p><div class="badge">⚔️ 2D / 3D игры ⚔️</div></div><div class="nav"><button class="nav-btn" onclick="goHome()">🏠 Главная</button><button class="nav-btn" onclick="showAllArticles()">📖 Статьи</button><button class="nav-btn" onclick="showAllProjects()">🎮 Проекты</button></div><div class="block"><h2>👥 Команда разработчиков</h2><div class="team-grid">${teamHtml}</div></div><div class="block"><h2>🎮 Наши проекты</h2><div class="projects-grid">${projHtml||'<p>Нет проектов</p>'}</div></div><div class="block"><h2>📖 Последние статьи</h2><div class="articles-list">${artHtml||'<p>Нет статей</p>'}</div></div><footer>RGGS — истории, которые остаются с вами</footer></div>`;
+        const teamHtml=team.map(t=>`
+            <div class="team-card" onclick="viewTeam(${t.id})">
+                <img src="${t.avatar}" onerror="this.src='https://placehold.co/150/8b0000/white?text=${t.name}'">
+                <h3>${escape(t.name)}</h3>
+                <p>${escape(t.role)}</p>
+                <small>${escape(t.desc.substring(0,60))}...</small>
+            </div>
+        `).join('');
+        
+        const projHtml=projects.map(p=>`
+            <div class="project-card" onclick="viewProject(${p.id})">
+                <div class="project-status ${p.status=='dev'?'status-dev':'status-ready'}">${p.status=='dev'?'⚙️ В разработке':'✅ Готов'}</div>
+                <img src="${p.image}" onerror="this.src='https://placehold.co/400x200/8b0000/white?text=no+img'">
+                <div class="project-info"><h3>${escape(p.title)}</h3><p>${escape(p.short)}</p></div>
+            </div>
+        `).join('');
+        
+        const artHtml=articles.map(a=>`
+            <div class="article-item" onclick="viewArticle(${a.id})">
+                <h3>📄 ${escape(a.title)}</h3>
+                <p>${escape(a.text.substring(0,100))}...</p>
+            </div>
+        `).join('');
+        
+        document.getElementById('app').innerHTML=`
+            <div class="container">
+                <div class="hero">
+                    <h1>R G G S</h1>
+                    <p>ReGeniusly Game Studio — инди с душой</p>
+                    <div class="badge">⚔️ 2D / 3D игры ⚔️</div>
+                </div>
+                <div class="nav">
+                    <button class="nav-btn" onclick="goHome()">🏠 Главная</button>
+                    <button class="nav-btn" onclick="showAllArticles()">📖 Статьи</button>
+                    <button class="nav-btn" onclick="showAllProjects()">🎮 Проекты</button>
+                </div>
+                <div class="block">
+                    <h2>👥 Команда разработчиков</h2>
+                    <div class="team-grid">${teamHtml}</div>
+                </div>
+                <div class="block">
+                    <h2>🎮 Наши проекты</h2>
+                    <div class="projects-grid">${projHtml||'<p>Нет проектов</p>'}</div>
+                </div>
+                <div class="block">
+                    <h2>📖 Последние статьи</h2>
+                    <div class="articles-list">${artHtml||'<p>Нет статей</p>'}</div>
+                </div>
+                <footer>RGGS — истории, которые остаются с вами</footer>
+            </div>
+        `;
         window.scrollTo(0,scrollPos);
     };
-    const goHome=()=>{scrollPos=window.scrollY;renderHome();};
-    window.viewTeam=(id)=>{let t=team.find(x=>x.id==id);if(t)showPage(t.name,t.avatar,`<h3>${escape(t.role)}</h3><p>${escape(t.desc)}</p>`);};
-    window.viewArticle=(id)=>{let a=articles.find(x=>x.id==id);if(a)showPage(a.title,a.image,`<p>${escape(a.text)}</p>`);};
-    window.viewProject=(id)=>{let p=projects.find(x=>x.id==id);if(p)showPage(p.title,p.image,`<p><strong>${escape(p.short)}</strong></p><p>${escape(p.full)}</p>`);};
-    const showPage=(title,img,content)=>{document.getElementById('app').innerHTML=`<div class="container"><button class="back-btn" onclick="goHome()">← На главную</button><div class="content-page"><h1>${escape(title)}</h1><img src="${img}" onerror="this.src='https://placehold.co/800/8b0000/white?text=image'">${content}</div></div>`;};
-    const showAllArticles=()=>{let h=articles.map(a=>`<div class="article-item" onclick="viewArticle(${a.id})"><h3>📄 ${escape(a.title)}</h3><p>${escape(a.text.substring(0,120))}...</p></div>`).join('');document.getElementById('app').innerHTML=`<div class="container"><button class="back-btn" onclick="goHome()">← На главную</button><h1 style="font-size:2rem">Статьи</h1><div class="articles-list">${h}</div></div>`;};
-    const showAllProjects=()=>{let h=projects.map(p=>`<div class="project-card" onclick="viewProject(${p.id})"><div class="project-status ${p.status=='dev'?'status-dev':'status-ready'}">${p.status=='dev'?'⚙️ В разработке':'✅ Готов'}</div><img src="${p.image}" onerror="this.src='https://placehold.co/400x200/8b0000/white?text=no+img'"><div class="project-info"><h3>${escape(p.title)}</h3><p>${escape(p.short)}</p></div></div>`).join('');document.getElementById('app').innerHTML=`<div class="container"><button class="back-btn" onclick="goHome()">← На главную</button><h1 style="font-size:2rem">Проекты</h1><div class="projects-grid">${h}</div></div>`;};
+    
+    const goHome=()=>{
+        scrollPos=window.scrollY;
+        renderHome();
+    };
+    
+    window.viewTeam=(id)=>{
+        let t=team.find(x=>x.id==id);
+        if(t){
+            document.getElementById('app').innerHTML=`
+                <div class="container">
+                    <button class="back-btn" onclick="goHome()">← На главную</button>
+                    <div class="content-page">
+                        <h1>${escape(t.name)}</h1>
+                        <h3 style="color:var(--text2)">${escape(t.role)}</h3>
+                        <img src="${t.avatar}" onerror="this.src='https://placehold.co/800/8b0000/white?text=${t.name}'">
+                        <p style="font-size:1.2rem; line-height:1.5;">${escape(t.desc)}</p>
+                    </div>
+                </div>
+            `;
+        }
+    };
+    
+    window.viewArticle=(id)=>{
+        let a=articles.find(x=>x.id==id);
+        if(a){
+            document.getElementById('app').innerHTML=`
+                <div class="container">
+                    <button class="back-btn" onclick="goHome()">← На главную</button>
+                    <div class="content-page">
+                        <h1>${escape(a.title)}</h1>
+                        <img src="${a.image}" onerror="this.src='https://placehold.co/800/8b0000/white?text=image'">
+                        <p style="font-size:1.2rem; line-height:1.5;">${escape(a.text)}</p>
+                    </div>
+                </div>
+            `;
+        }
+    };
+    
+    window.viewProject=(id)=>{
+        let p=projects.find(x=>x.id==id);
+        if(p){
+            document.getElementById('app').innerHTML=`
+                <div class="container">
+                    <button class="back-btn" onclick="goHome()">← На главную</button>
+                    <div class="content-page">
+                        <h1>🎮 ${escape(p.title)}</h1>
+                        <div class="project-status ${p.status=='dev'?'status-dev':'status-ready'}" style="position:relative; display:inline-block; margin-bottom:1rem;">${p.status=='dev'?'⚙️ В разработке':'✅ Готов'}</div>
+                        <img src="${p.image}" onerror="this.src='https://placehold.co/800/8b0000/white?text=project'">
+                        <p><strong>Кратко:</strong> ${escape(p.short)}</p>
+                        <p><strong>Полное описание:</strong> ${escape(p.full)}</p>
+                    </div>
+                </div>
+            `;
+        }
+    };
+    
+    const showAllArticles=()=>{
+        let h=articles.map(a=>`<div class="article-item" onclick="viewArticle(${a.id})"><h3>📄 ${escape(a.title)}</h3><p>${escape(a.text.substring(0,120))}...</p></div>`).join('');
+        document.getElementById('app').innerHTML=`<div class="container"><button class="back-btn" onclick="goHome()">← На главную</button><h1 style="font-size:2rem">Статьи</h1><div class="articles-list">${h}</div></div>`;
+    };
+    
+    const showAllProjects=()=>{
+        let h=projects.map(p=>`<div class="project-card" onclick="viewProject(${p.id})"><div class="project-status ${p.status=='dev'?'status-dev':'status-ready'}">${p.status=='dev'?'⚙️ В разработке':'✅ Готов'}</div><img src="${p.image}" onerror="this.src='https://placehold.co/400x200/8b0000/white?text=no+img'"><div class="project-info"><h3>${escape(p.title)}</h3><p>${escape(p.short)}</p></div></div>`).join('');
+        document.getElementById('app').innerHTML=`<div class="container"><button class="back-btn" onclick="goHome()">← На главную</button><h1 style="font-size:2rem">Проекты</h1><div class="projects-grid">${h}</div></div>`;
+    };
     
     let currentTheme='light';
-    const setTheme=(t)=>{currentTheme=t;document.body.className=t;document.getElementById('themeToggle').textContent=t=='light'?'🌙':'☀️';localStorage.setItem('theme',t);renderHome();};
-    const themeStored=localStorage.getItem('theme');if(themeStored)setTheme(themeStored);else setTheme('light');
-    document.getElementById('themeToggle').onclick=()=>{let newTheme=currentTheme=='light'?'dark':'light';setTheme(newTheme);};
+    const setTheme=(t)=>{
+        currentTheme=t;
+        document.body.className=t;
+        document.getElementById('themeToggle').textContent=t=='light'?'🌙':'☀️';
+        localStorage.setItem('theme',t);
+        let savedScroll=window.scrollY;
+        renderHome();
+        setTimeout(()=>{window.scrollTo(0,savedScroll);},10);
+    };
     
-    const adminPage=document.getElementById('adminPage'),loginModal=document.getElementById('loginModal'),fab=document.getElementById('adminFab');
+    const themeStored=localStorage.getItem('theme');
+    if(themeStored)setTheme(themeStored);
+    else setTheme('light');
+    
+    document.getElementById('themeToggle').onclick=()=>{
+        let newTheme=currentTheme=='light'?'dark':'light';
+        let savedScroll=window.scrollY;
+        setTheme(newTheme);
+        setTimeout(()=>{window.scrollTo(0,savedScroll);},20);
+    };
+    
+    const adminPage=document.getElementById('adminPage');
+    const loginModal=document.getElementById('loginModal');
+    const fab=document.getElementById('adminFab');
     const closeAdmin=()=>{adminPage.classList.remove('show');};
     const openAdminIfAuth=()=>{if(isAdmin){adminPage.classList.add('show');renderAdminLists();}else loginModal.classList.add('active');};
+    
     fab.onclick=openAdminIfAuth;
     document.getElementById('closeAdminBtn').onclick=closeAdmin;
     document.getElementById('closeLoginBtn').onclick=()=>loginModal.classList.remove('active');
     
-    const loginInput=document.getElementById('loginInput'),passInput=document.getElementById('passwordInput');
+    const loginInput=document.getElementById('loginInput');
+    const passInput=document.getElementById('passwordInput');
     const handleEnter=(e,next)=>{if(e.key==='Enter'){e.preventDefault();next?next.focus():document.getElementById('doLoginBtn').click();}};
     loginInput.onkeydown=e=>handleEnter(e,passInput);
     passInput.onkeydown=e=>handleEnter(e,null);
-    document.getElementById('doLoginBtn').onclick=()=>{if(loginInput.value==='админ'&&passInput.value==='админ'){isAdmin=true;loginModal.classList.remove('active');adminPage.classList.add('show');renderAdminLists();loginInput.value='';passInput.value='';}else alert('Неверно! Логин: админ, пароль: админ');};
+    
+    document.getElementById('doLoginBtn').onclick=()=>{
+        if(loginInput.value==='админ'&&passInput.value==='админ'){
+            isAdmin=true;
+            loginModal.classList.remove('active');
+            adminPage.classList.add('show');
+            renderAdminLists();
+            loginInput.value='';
+            passInput.value='';
+        }else alert('Неверно! Логин: админ, пароль: админ');
+    };
     
     function renderAdminLists(){
-        document.getElementById('articlesListAdmin').innerHTML=articles.map(a=>`<div class="project-item"><div><strong>${escape(a.title)}</strong><br><small>${escape(a.text.substring(0,60))}...</small></div><button class="btn btn-danger" onclick="deleteArticle(${a.id})">🗑️</button></div>`).join('');
-        document.getElementById('projectsListAdmin').innerHTML=projects.map(p=>`<div class="project-item"><div><strong>${escape(p.title)}</strong> — ${p.status=='dev'?'В разработке':'Готов'}</div><button class="btn btn-danger" onclick="deleteProject(${p.id})">🗑️</button></div>`).join('');
-        document.getElementById('teamListAdmin').innerHTML=team.map(t=>`<div class="dev-edit-card"><h4>${escape(t.name)}</h4><div class="form-group"><input type="text" id="tname_${t.id}" value="${escape(t.name)}" placeholder="Имя"></div><div class="form-group"><input type="text" id="trole_${t.id}" value="${escape(t.role)}" placeholder="Роль"></div><div class="form-group"><textarea id="tdesc_${t.id}" rows="2">${escape(t.desc)}</textarea></div><div class="form-group"><input type="file" id="tfile_${t.id}" accept="image/*"></div><div class="form-group"><input type="text" id="turl_${t.id}" value="${t.avatar}" placeholder="URL аватара"></div><small>Текущий аватар: ${t.avatar.substring(0,30)}</small></div>`).join('');
+        document.getElementById('articlesListAdmin').innerHTML=articles.map(a=>`
+            <div class="project-item">
+                <div><strong>${escape(a.title)}</strong><br><small>${escape(a.text.substring(0,60))}...</small></div>
+                <button class="btn btn-danger" onclick="deleteArticle(${a.id})">🗑️</button>
+            </div>
+        `).join('');
+        
+        document.getElementById('projectsListAdmin').innerHTML=projects.map(p=>`
+            <div class="project-item">
+                <div><strong>${escape(p.title)}</strong> — ${p.status=='dev'?'В разработке':'Готов'}</div>
+                <button class="btn btn-danger" onclick="deleteProject(${p.id})">🗑️</button>
+            </div>
+        `).join('');
+        
+        document.getElementById('teamListAdmin').innerHTML=team.map(t=>`
+            <div class="dev-edit-card">
+                <h4>${escape(t.name)}</h4>
+                <div class="form-group"><input type="text" id="tname_${t.id}" value="${escape(t.name)}" placeholder="Имя"></div>
+                <div class="form-group"><input type="text" id="trole_${t.id}" value="${escape(t.role)}" placeholder="Роль"></div>
+                <div class="form-group"><textarea id="tdesc_${t.id}" rows="3">${escape(t.desc)}</textarea></div>
+                <div class="form-group"><input type="file" id="tfile_${t.id}" accept="image/*"></div>
+                <div class="form-group"><input type="text" id="turl_${t.id}" value="${t.avatar}" placeholder="URL аватара"></div>
+                <small>Текущий аватар: ${t.avatar.substring(0,40)}</small>
+            </div>
+        `).join('');
     }
-    window.deleteArticle=(id)=>{if(confirm('Удалить статью?')){articles=articles.filter(a=>a.id!=id);save();renderHome();renderAdminLists();}};
-    window.deleteProject=(id)=>{if(confirm('Удалить проект?')){projects=projects.filter(p=>p.id!=id);save();renderHome();renderAdminLists();}};
-    document.getElementById('createArticleBtn').onclick=()=>{let t=document.getElementById('artTitle').value.trim();let tx=document.getElementById('artText').value.trim();let url=document.getElementById('artUrl').value.trim();let f=document.getElementById('artFile').files[0];if(!t||!tx){alert('Заполните заголовок и текст');return;}let saveImg=(img)=>{articles.unshift({id:Date.now(),title:t,image:img||'pic1.jpeg',text:tx});save();renderHome();renderAdminLists();document.getElementById('artTitle').value='';document.getElementById('artText').value='';document.getElementById('artUrl').value='';document.getElementById('artFile').value='';alert('Статья создана!');};if(f)upload(f,saveImg);else saveImg(url);};
-    document.getElementById('createProjectBtn').onclick=()=>{let t=document.getElementById('projTitle').value.trim();let st=document.getElementById('projStatus').value;let sd=document.getElementById('projShort').value.trim();let fd=document.getElementById('projFull').value.trim();let url=document.getElementById('projUrl').value.trim();let f=document.getElementById('projFile').files[0];if(!t||!fd){alert('Название и полное описание обязательны');return;}let saveImg=(img)=>{projects.unshift({id:Date.now(),title:t,image:img||'pic1.jpeg',short:sd||fd.substring(0,80),full:fd,status:st});save();renderHome();renderAdminLists();document.getElementById('projTitle').value='';document.getElementById('projStatus').value='dev';document.getElementById('projShort').value='';document.getElementById('projFull').value='';document.getElementById('projUrl').value='';document.getElementById('projFile').value='';alert('Проект создан!');};if(f)upload(f,saveImg);else saveImg(url);};
-    document.getElementById('saveTeamBtn').onclick=()=>{team.forEach(t=>{let n=document.getElementById(`tname_${t.id}`)?.value;let r=document.getElementById(`trole_${t.id}`)?.value;let d=document.getElementById(`tdesc_${t.id}`)?.value;let u=document.getElementById(`turl_${t.id}`)?.value;let f=document.getElementById(`tfile_${t.id}`)?.files[0];if(n)t.name=n;if(r)t.role=r;if(d)t.desc=d;if(u)t.avatar=u;if(f){let rd=new FileReader();rd.onload=e=>{t.avatar=e.target.result;save();renderHome();renderAdminLists();};rd.readAsDataURL(f);}});save();renderHome();renderAdminLists();alert('Команда обновлена!');};
     
-    document.querySelectorAll('.tab-btn').forEach(btn=>{btn.onclick=()=>{let tab=btn.dataset.tab;document.querySelectorAll('.tab-pane').forEach(p=>p.classList.remove('active'));document.getElementById(`tab${tab.charAt(0).toUpperCase()+tab.slice(1)}`).classList.add('active');};});
+    window.deleteArticle=(id)=>{
+        if(confirm('Удалить статью?')){
+            articles=articles.filter(a=>a.id!=id);
+            save();
+            let savedScroll=window.scrollY;
+            renderHome();
+            setTimeout(()=>{window.scrollTo(0,savedScroll);},10);
+            renderAdminLists();
+        }
+    };
+    
+    window.deleteProject=(id)=>{
+        if(confirm('Удалить проект?')){
+            projects=projects.filter(p=>p.id!=id);
+            save();
+            let savedScroll=window.scrollY;
+            renderHome();
+            setTimeout(()=>{window.scrollTo(0,savedScroll);},10);
+            renderAdminLists();
+        }
+    };
+    
+    document.getElementById('createArticleBtn').onclick=()=>{
+        let t=document.getElementById('artTitle').value.trim();
+        let tx=document.getElementById('artText').value.trim();
+        let url=document.getElementById('artUrl').value.trim();
+        let f=document.getElementById('artFile').files[0];
+        if(!t||!tx){alert('Заполните заголовок и текст');return;}
+        let saveImg=(img)=>{
+            articles.unshift({id:Date.now(),title:t,image:img||'pic1.jpeg',text:tx});
+            save();
+            let savedScroll=window.scrollY;
+            renderHome();
+            setTimeout(()=>{window.scrollTo(0,savedScroll);},10);
+            renderAdminLists();
+            document.getElementById('artTitle').value='';
+            document.getElementById('artText').value='';
+            document.getElementById('artUrl').value='';
+            document.getElementById('artFile').value='';
+            alert('Статья создана!');
+        };
+        if(f)upload(f,saveImg);
+        else saveImg(url);
+    };
+    
+    document.getElementById('createProjectBtn').onclick=()=>{
+        let t=document.getElementById('projTitle').value.trim();
+        let st=document.getElementById('projStatus').value;
+        let sd=document.getElementById('projShort').value.trim();
+        let fd=document.getElementById('projFull').value.trim();
+        let url=document.getElementById('projUrl').value.trim();
+        let f=document.getElementById('projFile').files[0];
+        if(!t||!fd){alert('Название и полное описание обязательны');return;}
+        let saveImg=(img)=>{
+            projects.unshift({id:Date.now(),title:t,image:img||'pic1.jpeg',short:sd||fd.substring(0,80),full:fd,status:st});
+            save();
+            let savedScroll=window.scrollY;
+            renderHome();
+            setTimeout(()=>{window.scrollTo(0,savedScroll);},10);
+            renderAdminLists();
+            document.getElementById('projTitle').value='';
+            document.getElementById('projStatus').value='dev';
+            document.getElementById('projShort').value='';
+            document.getElementById('projFull').value='';
+            document.getElementById('projUrl').value='';
+            document.getElementById('projFile').value='';
+            alert('Проект создан!');
+        };
+        if(f)upload(f,saveImg);
+        else saveImg(url);
+    };
+    
+    document.getElementById('saveTeamBtn').onclick=()=>{
+        team.forEach(t=>{
+            let n=document.getElementById(`tname_${t.id}`)?.value;
+            let r=document.getElementById(`trole_${t.id}`)?.value;
+            let d=document.getElementById(`tdesc_${t.id}`)?.value;
+            let u=document.getElementById(`turl_${t.id}`)?.value;
+            let f=document.getElementById(`tfile_${t.id}`)?.files[0];
+            if(n)t.name=n;
+            if(r)t.role=r;
+            if(d)t.desc=d;
+            if(u)t.avatar=u;
+            if(f){
+                let rd=new FileReader();
+                rd.onload=e=>{
+                    t.avatar=e.target.result;
+                    save();
+                    let savedScroll=window.scrollY;
+                    renderHome();
+                    setTimeout(()=>{window.scrollTo(0,savedScroll);},10);
+                    renderAdminLists();
+                };
+                rd.readAsDataURL(f);
+            }
+        });
+        save();
+        let savedScroll=window.scrollY;
+        renderHome();
+        setTimeout(()=>{window.scrollTo(0,savedScroll);},10);
+        renderAdminLists();
+        alert('Команда обновлена!');
+    };
+    
+    document.querySelectorAll('.tab-btn').forEach(btn=>{
+        btn.onclick=()=>{
+            let tab=btn.dataset.tab;
+            document.querySelectorAll('.tab-pane').forEach(p=>p.classList.remove('active'));
+            document.getElementById(`tab${tab.charAt(0).toUpperCase()+tab.slice(1)}`).classList.add('active');
+        };
+    });
     document.querySelectorAll('.tab-pane')[0].classList.add('active');
     
-    load();renderHome();
+    load();
+    renderHome();
 </script>
 </body>
 </html>
